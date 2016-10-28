@@ -1,5 +1,5 @@
 # RemotePiBot
-Remotely controllable Raspberry Pi rover.
+Remotely controllable Raspberry Pi rover. Currently only streaming and camera look are working.
 
 ### Description
 This is a simple set of scripts to remotely control a Raspberry Pi robot and view a video stream from the picamera. An Arduino is used for the actual electronics, connected to the Pi via USB.
