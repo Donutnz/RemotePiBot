@@ -8,15 +8,21 @@ import threading as th
 import sys
 import io
 
-stp=th.Event() #Major stop flag for clean exit! Only touch if you know what you're doing.
+stp=th.Event() #Major stop flag for clean exit
 strmlive=th.Event()
 
 def streaminit():
 	sock=socket.socket()
-	sock.bind(("0.0.0.0",8000)) #From wherever VLC is on your client PC put in "vlc tcp/h264://my_pi_address:8000/" to connect.
+	try:
+		sock.bind(("0.0.0.0",8000))
+	except:
+		stp.set()
+		strmlive.set()
+		print("Address already in use error")
+		return
 	sock.listen(0)
-	#sock.connect(("192.168.20.15",8000)) #Enable for client handshake mode. Also use your PC's IP.
-	#con=sock.makefile("wb") #Enable for client handshake mode
+	#sock.connect(("192.168.20.15",8000)) #Enable for client handshake mode
+	#con=sock.makefile("wb") #Re-enable for when within network
 	con=sock.accept()[0].makefile("wb")
 	print("Socks setup")
 	try:
@@ -29,28 +35,38 @@ def streaminit():
 		strmlive.set()
 		print("Live!")
 		stp.wait()
-	finally:
 		cam.stop_recording()
+	finally:
 		con.close()
 		sock.close()
-		return
+		print("Stream ended!")
+	return
 
 def arduinoinit():
 	ser=serial.Serial("//dev//ttyACM0",9600)
 	print("Serial comms initiated")
 	while True:
+		if(stp.is_set()):
+			ser.write("E000")
+			return
 		try:
-			if(stp.is_set()):
-				return
-			val=str(input("Rotate to: "))
-			if(val.upper()!="EXIT"):
+			val=str(input("Ready for command (LNNN): "))
+			if(val.upper()!="EXIT" and val.upper()!="HELP"):
+				if(len(val)<4):
+					l=val[0]
+					nums=val[1:3]
+					val=l+"0"+nums
 				pos=val.encode()
 				ser.write(pos)
 				print("Written")
 			elif(val.upper()=="EXIT"):
+				ser.write("E000") #End code
 				stp.set()
 				return
+			elif(val.upper()=="HELP"):
+				print("Input commands in format \"LNNN\" where L=Letter and N=Number.\nLetters:\nX = X axis (10-170)\nY = Y axis (10-170)\nR = right motor (0-225)\nL = left motor (0-225)\nE000 = reset to normal\nH = help (this)\n")
 		except:
+			ser.write("E000")
 			err=[]
 			for x in range(0,len(sys.exc_info())):
 				err.append(sys.exc_info()[x])
@@ -71,6 +87,11 @@ def main():
 	ardu.start()
 	print("Arduino up...")
 	stp.wait()
+	thrs=th.enumerate()
+	if(len(thrs)>0):
+		print(thrs)
+	print("Done!")
+	return
 
 if __name__=="__main__":
 	try:
@@ -78,8 +99,3 @@ if __name__=="__main__":
 	except:
 		stp.set()
 		print("Exited cleanly")
-
-
-
-
-#Written by Donutnz. Use at your own risk.
