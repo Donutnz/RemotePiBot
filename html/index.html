@@ -1,0 +1,84 @@
+<doctype html>
+<html>
+<head>
+<title>RaspPiBot</title>
+<script src="https://code.jquery.com/jquery-3.1.1.slim.min.js"></script>
+<script type="text/javascript" src="/webiopi.js"></script>
+</head>
+
+<body>
+<h2>RasPiBot</h2>
+<h4>Web interface for Raspberry Pi robot</h4>
+
+<div align="center">
+	<div>
+	<object type="application/x-vlc-plugin" width="360" height="240" target="tcp/h264://Your_IP_here:8001/"></object> <!--Replace "Your_IP_here" with your IP. For use outside your network, use your public IP (portforwarded).-->
+	</div>
+	<input type="button" id="testbut" onClick="tester()" value="Test"></input>
+	<div>
+	<h4 align="center">Camera</h4>
+	<div>
+	<h5>X</h5>
+	<input type="range" id="camx" min=10 max=170 step=10 name="X" onChange="cameraX()"></input>
+	</div>
+	<div>
+	<h5>Y</h5>
+	<input type="range" id="camy" min=10 max=170 step=10 name="Y" onChange="cameraY()"></input>
+	</div>
+	</div>
+	<div>
+	<h4 align="center">Motors</h4>
+	<div>
+	<h5>R</h5>
+	<input type="range" id="motr" min=110 max=225 name="R" onChange="motorR()"></input>
+	</div>
+	<div>
+	<h5>L</h5>
+	<input type="range" id="motl" min=110 max=225 name="L" onChange="motorL()"></input>
+	</div>
+	<input type="button" value="All stop" onClick="halt()"></input>
+	</div>
+</div>
+
+<script>
+function tester(){
+	console.log("Working!");
+	webiopi().callMacro("test",1);
+}
+
+function cameraX(){
+ 	val=$("#camx").val();
+	webiopi().callMacro("camX",val);
+	console.log("Set camera X to: "+val);
+}
+
+function cameraY(){
+	val=$("#camy").val();
+	webiopi().callMacro("camY",val);
+	console.log("Set camera Y to: "+val);
+}
+
+function motorR(){
+	val=$("#motr").val();
+	webiopi().callMacro("motR",val);
+	console.log("Set right motor to: "+val);
+}
+
+function motorL(){
+	val=$("#motl").val();
+	webiopi().callMacro("motL",val);
+	console.log("Set left motor to: "+val);
+}
+
+function halt(){
+	webiopi().callMacro("stop");
+	console.log("All stopped");
+}
+
+
+//Written by Donutnz
+</script>
+
+<!--Written by Donutnz-->
+</body>
+</html>

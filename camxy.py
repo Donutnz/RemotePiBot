@@ -47,7 +47,8 @@ def arduinoinit():
 	print("Serial comms initiated")
 	while True:
 		if(stp.is_set()):
-			ser.write("E000")
+			csh="E000"
+			ser.write(csh.encode())
 			return
 		try:
 			val=str(input("Ready for command (LNNN): "))
@@ -99,3 +100,7 @@ if __name__=="__main__":
 	except:
 		stp.set()
 		print("Exited cleanly")
+
+
+
+#Written by Donutnz

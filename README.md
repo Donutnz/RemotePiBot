@@ -2,7 +2,7 @@
 Remotely controllable Raspberry Pi rover.
 
 ### Description
-This is a simple set of scripts to remotely control a Raspberry Pi robot and view a video stream from the picamera. An Arduino is used for the actual electronics, connected to the Pi via USB.
+This is a simple set of scripts to remotely control a Raspberry Pi robot and view a video stream from the picamera. An Arduino is used for the actual electronics, connected to the Pi via USB. It can be run with a web interface or without. If you want to control via command line, use camxy.py and ignore "python" and "html".
 
 ### Requirements:
 #### Hardware:
@@ -15,6 +15,7 @@ This is a simple set of scripts to remotely control a Raspberry Pi robot and vie
 * Any double 6V DC motor system that supports PWM. (More info [Here](https://learn.adafruit.com/adafruit-arduino-lesson-13-dc-motors/overview "Adafruit to the rescue"), I'm using the guts from an old [Titan Tank](https://www.electronickits.com/titan-tank-robot-kit-ck21531n/))
 #### Software
 * Python 3
+* WebIoPi (web interface only)
 * Arduino SDK
 * VLC (on the client PC)
 
