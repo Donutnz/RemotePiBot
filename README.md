@@ -13,6 +13,7 @@ This is a simple set of scripts to remotely control a Raspberry Pi robot and vie
 * Arduino power source (I used 6 AAs)
 * Raspberry Pi power source (The higher the amperage the better, lower may cause RPi crashes)
 * Any double 6V DC motor system that supports PWM. (More info [Here](https://learn.adafruit.com/adafruit-arduino-lesson-13-dc-motors/overview "Adafruit to the rescue"), I'm using the guts from an old [Titan Tank](https://www.electronickits.com/titan-tank-robot-kit-ck21531n/))
+
 #### Software
 * Python 3
 * WebIoPi (web interface only)
